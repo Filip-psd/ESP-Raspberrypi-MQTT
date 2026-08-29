@@ -1,0 +1,29 @@
+[
+    {
+        "id": "1e0d3328b3fd28a8",
+        "type": "ui_toast",
+        "z": "b5b86c798ff22c1d",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 480,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "190ff3824406b681",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
