@@ -15,19 +15,19 @@ struct struct_message {
 struct struct_message package;
 
 void sensorRead (){
-  VL53L0X_RangingMeasurementData_t measure;
+  VL53L0X_RangingMeasurementData_t measure; //library-specific object
     
   Serial.print("Reading a measurement... ");
   lox.rangingTest(&measure, false); 
-  if (measure.RangeStatus != 4) {  
-    package.distance = measure.RangeMilliMeter; 
+  if (measure.RangeStatus != 4) {  // RangeStatus == 4 indicates a phase failure - library specific
+    package.distance = measure.RangeMilliMeter; //assigning the value to the distance float in the package
   } 
   delay(100);
 }
 
 esp_now_peer_info_t responderInfo; 
 
-void parsedData (const wifi_tx_info_t *tx_info, esp_now_send_status_t status){
+void parsedData (const wifi_tx_info_t *tx_info, esp_now_send_status_t status){ //callback function
   Serial.print("Package status ");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "sending successful" : "sending failed");
   Serial.printf("Distance:", package.distance);
@@ -49,8 +49,8 @@ void setup() {
     Serial.println("failed to connect");
     return;
   }
-  esp_now_register_send_cb(parsedData);
-  memcpy(responderInfo.peer_addr, macAddress, 6);
+  esp_now_register_send_cb(parsedData); //registering callback
+  memcpy(responderInfo.peer_addr, macAddress, 6); //assigning mac address
   responderInfo.channel = 0;
   responderInfo.encrypt = false;
 
