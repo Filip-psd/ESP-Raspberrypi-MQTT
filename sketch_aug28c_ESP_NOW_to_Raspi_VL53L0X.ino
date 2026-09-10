@@ -33,10 +33,26 @@ void parsedData (const wifi_tx_info_t *tx_info, esp_now_send_status_t status){ /
   Serial.printf("Distance:", package.distance);
 }
 
+int getWiFiChannel(const char *ssid) {
+  int n = WiFi.scanNetworks();
+  for (int i = 0; i < n; i++) {
+    if (String(ssid) == WiFi.SSID(i)) {
+      return WiFi.channel(i);
+    }
+  }
+  return 1;
+}
+
 void setup() {
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   Wire.begin();
+
+  Serial.print("Sender channel: ");
+  Serial.println(WiFi.channel());
+  int ch = getWiFiChannel("TP-Link_D36D"); //change current for network name
+  esp_wifi_set_channel(ch, WIFI_SECOND_CHAN_NONE);
+  Serial.printf("Locked to channel %d\n", ch);
 
   if (!lox.begin()) {
     Serial.println("Failed to boot VL53L0X - check wiring/I2C address");
