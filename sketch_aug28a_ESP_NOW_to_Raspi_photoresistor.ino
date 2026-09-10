@@ -23,10 +23,26 @@ void parsedData (const wifi_tx_info_t *tx_info, esp_now_send_status_t status){ /
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "sending successful" : "sending failed");
 }
 
+int getWiFiChannel(const char *ssid) {
+  int n = WiFi.scanNetworks();
+  for (int i = 0; i < n; i++) {
+    if (String(ssid) == WiFi.SSID(i)) {
+      return WiFi.channel(i);
+    }
+  }
+  return 1;
+}
+
 void setup() {
-    Serial.begin(115200);
-    pinMode(PHOTOPIN, INPUT);
-    WiFi.mode(WIFI_STA);
+  Serial.begin(115200);
+  pinMode(PHOTOPIN, INPUT);
+  WiFi.mode(WIFI_STA);
+
+  Serial.print("Sender channel: ");
+  Serial.println(WiFi.channel());
+  int ch = getWiFiChannel("TP-Link_D36D"); //change current for network name
+  esp_wifi_set_channel(ch, WIFI_SECOND_CHAN_NONE);
+  Serial.printf("Locked to channel %d\n", ch);
 
   if(esp_now_init() != ESP_OK){
   Serial.println("failed to connect");
